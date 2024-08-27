@@ -1,19 +1,34 @@
 package com.educandoweb.course.resources;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.educandoweb.course.entities.User;
+import com.educandoweb.course.services.UserServices;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
 	
+	@Autowired
+	private UserServices services;
+	
 	@GetMapping
-	public ResponseEntity<User> findAll(){ // ISSO AQUI É O CONTROLADOR REST QUE RESPONDE NO CAMINHO USER, FOI FEITO SO PARA TESTAR SE ESTA TUDO OK;
-		User u = new User(1L, "Pedro", "pedro@gmail.com", "(47)99602-3734", "Silvino213210");
-		return ResponseEntity.ok().body(u);
+	public ResponseEntity<List<User>> findAll(){ // ISSO AQUI É O CONTROLADOR REST QUE RESPONDE NO CAMINHO USER, FOI FEITO SO PARA TESTAR SE ESTA TUDO OK;
+		List<User> list = services.findAll();
+		
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value = "/{id}") // É PARA DIZER QUE VAI ACEITAR UM ID NA URL
+	public ResponseEntity<User> findById(@PathVariable Long id){ // O @PATHVARIABLE É PARA O SPRING ACEITAR ESSE ID QUE ESTOU PASSANDO COMO PARAMETRO
+		User obj = services.findById(id);
+		return ResponseEntity.ok().body(obj);
 	}
 }
