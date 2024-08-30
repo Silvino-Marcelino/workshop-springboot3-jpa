@@ -42,7 +42,7 @@ public class Order implements Serializable{
 	@OneToMany(mappedBy = "id.order")
 	Set<OrderItem> items = new HashSet<>();
 	
-	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL) // CASCADE É PARA QUE A ASSOCIAÇAO 1 PARA 1 COM O PAYMENT TENHA O MESMO ID
 	private Payment payment;
 	
 	public Order() {
@@ -99,6 +99,14 @@ public class Order implements Serializable{
 	
 	public void setPayment(Payment payment) {
 		this.payment = payment;
+	}
+	
+	public double getTotal() {
+		double sum = 0.0;
+		for(OrderItem x : items) {
+			sum += x.getSubTotal();
+		}
+		return sum;
 	}
 
 	@Override
